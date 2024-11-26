@@ -1,0 +1,12 @@
+{
+    "Star Wars": {
+        "year": 2005,
+        "rating": 8.0,
+        "poster_url": "images/movies/avengers.jpg"
+    },
+    "Hans": {
+        "year": 2001,
+        "rating": 5.6,
+        "poster_url": "NOT ADDED YET"
+    }
+}
