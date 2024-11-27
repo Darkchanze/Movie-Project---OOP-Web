@@ -1,5 +1,7 @@
 import statistics
 import random
+from storage_json import StorageJson
+from storage_csv import StorageCsv
 
 class MovieApp:
     """user input is validated and the user can choose different commands."""
@@ -24,7 +26,7 @@ class MovieApp:
         print("********** My Movies Database **********")
         in_menu = True
         while in_menu:
-            movies = self.storage.read_movies_json()
+            movies = self.storage.read_movies()
             menu_functions = {
                 0: self.exit_menu,
                 1: self.list_movies,
