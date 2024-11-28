@@ -1,8 +1,8 @@
 import statistics
 import random
 from API_Movies import api_request_data
-from storage_json import StorageJson
-from storage_csv import StorageCsv
+from generate_website import generate_website
+
 
 class MovieApp:
     """user input is validated and the user can choose different commands."""
@@ -38,8 +38,9 @@ class MovieApp:
                 6: self.print_random_movie,
                 7: self.search_movies,
                 8: self.print_movies_sorted_by_rating,
-                9: self.print_movies_sorted_by_year,
+                9: self._print_movies_sorted_by_year,
                 10: self.filter_movie,
+                11: self.generate_website
             }
             try:
                 print("""
@@ -55,25 +56,32 @@ class MovieApp:
         8. Movies sorted by rating
         9. Movies sorted by year
         10. Filter movies
+        11. Generate Website
 
         Enter choice (0-10): """, end='')
                 user_menu_choice = int(input(''))
                 print()
-                if 0 <= user_menu_choice <= 10:
+                if 0 <= user_menu_choice <= 11:
                     if user_menu_choice == 0:
                         in_menu = menu_functions[user_menu_choice]()
                         break
                     elif user_menu_choice in {1, 3, 4}:
                         menu_functions[user_menu_choice]()
-                    elif user_menu_choice in {2, 5, 6, 7, 8, 9, 10}:
+                    elif user_menu_choice in {2, 5, 6, 7, 8, 9, 10, 11}:
                         menu_functions[user_menu_choice](movies)
                         print()
                 else:
-                    print(f"The number must be between 0 and {len(menu_functions)}.")
+                    print(f"The number must be between 0 and {len(menu_functions) - 1}.")
             except Exception:
                 print(f"Invalid choice.")
                 print()
             input('Press enter to continue')
+
+    def generate_website(self, movies: dict):
+        """Generates a website with the movies saved in index.html"""
+        generate_website(movies)
+        print("Website successfully created")
+
 
 
     def exit_menu(self):
@@ -100,7 +108,7 @@ class MovieApp:
             movies (dict): A dictionary of the user's current movies, where the
                            keys are movie titles and the values contain movie details.
         """
-        api_data = self.get_movie_name_and_fetch_info_from_api(movies)
+        api_data = self._get_movie_name_and_fetch_info_from_api(movies)
         if api_data:
             title, year, rating, poster_url = api_data
         else:
@@ -130,7 +138,7 @@ class MovieApp:
         self.storage.update_movie(movie_to_update, rating)
 
 
-    def get_movie_name_and_fetch_info_from_api(self, movies: dict):
+    def _get_movie_name_and_fetch_info_from_api(self, movies: dict):
         """
         Prompt the user to enter a movie name, fetch its details from an API,
         and ensure it is not already in the movie collection.
@@ -193,18 +201,18 @@ class MovieApp:
         list_of_ratings = [movie['rating'] for movie in movies.values()]
         print(f"Average rating: {round(statistics.mean(list_of_ratings), 1)}")
         print(f"Median rating: {round(statistics.median(list_of_ratings), 1)}")
-        self.print_best_movie(movies)
-        self.print_worst_movie(movies)
+        self._print_best_movie(movies)
+        self._print_worst_movie(movies)
 
 
-    def print_best_movie(self, movies: dict):
+    def _print_best_movie(self, movies: dict):
         """
          Print the best rated movie from the user instance.
 
          Args:
              movies (dict): The current dictionary of movies.
          """
-        movies_sorted_rating = self.movies_sorted_by_rating(movies)
+        movies_sorted_rating = self._movies_sorted_by_rating(movies)
         last_movie_rating = movies[movies_sorted_rating[0]]['rating']
         for movie in movies_sorted_rating:
             if last_movie_rating <= movies[movie]['rating']:
@@ -214,14 +222,14 @@ class MovieApp:
                 break
 
 
-    def print_worst_movie(self, movies: dict):
+    def _print_worst_movie(self, movies: dict):
         """
          Print the worst rated movie from the user instance.
 
          Args:
              movies (dict): The current dictionary of movies.
          """
-        movies_sorted_rating = self.movies_sorted_by_rating(movies)
+        movies_sorted_rating = self._movies_sorted_by_rating(movies)
         movies_sorted_rating.reverse()
         last_movie_rating = movies[movies_sorted_rating[0]]['rating']
         for movie in movies_sorted_rating:
@@ -232,7 +240,7 @@ class MovieApp:
                 break
 
 
-    def movies_sorted_by_rating(self, movies: dict):
+    def _movies_sorted_by_rating(self, movies: dict):
         """
         Returns a list sorted by ratings from highest to lowest.
 
@@ -273,7 +281,7 @@ class MovieApp:
                 print(f"{movie}, {movies[movie]['rating']}")
 
 
-    def print_movies_sorted_by_year(self, movies: dict):
+    def _print_movies_sorted_by_year(self, movies: dict):
         """
         Print movies sorted by their release year, either ascending or descending.
 
@@ -303,7 +311,7 @@ class MovieApp:
         Args:
             movies (dict): The current dictionary of movies.
         """
-        movies_sorted_rating = self.movies_sorted_by_rating(movies)
+        movies_sorted_rating = self._movies_sorted_by_rating(movies)
         for movie in movies_sorted_rating:
             print(f"{movie} ({movies[movie]['year']}): {movies[movie]['rating']}")
 
@@ -332,9 +340,9 @@ class MovieApp:
         Prints:
             A filtered list of movies matching the criteria.
         """
-        minimum_rating = self.get_movie_rating()
-        start_year = self.get_movie_year("start")
-        end_year = self.get_movie_year("end")
+        minimum_rating = self._get_movie_rating()
+        start_year = self._get_movie_year("start")
+        end_year = self._get_movie_year("end")
         movies_to_delete = set()
         if minimum_rating != "":
             for movie in movies:
@@ -353,7 +361,7 @@ class MovieApp:
         print(movies)
 
 
-    def get_movie_rating(self):
+    def _get_movie_rating(self):
         """
         Prompt the user to enter a minimum rating for filtering movies.
 
@@ -373,7 +381,7 @@ class MovieApp:
         return new_movie_rating
 
 
-    def get_movie_year(self, text_start_end: str):
+    def _get_movie_year(self, text_start_end: str):
         """
         Prompt the user to enter a year (start or end) for filtering movies.
 
@@ -396,18 +404,8 @@ class MovieApp:
         return new_movie_rating
 
 
-    def _generate_website(self):
-        """"""
-        pass
-
-
-    def _command_movie_show_stats(self):
-        """"""
-        pass
-
 
 # todo Public, not public? _ or not!
-# todo Maybe kuck das alles case sensitive ist vor allem bei CRUD, da is bissl gemixt auf der seite und storage json!
 
 
 

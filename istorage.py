@@ -79,7 +79,7 @@ class IStorage(ABC):
             ValueError: If the title input fails validation.
         """
         movies_data_dict = self.read_movies()
-        self.validate_title(title)
+        self._validate_title(title)
         movie = next((movie for movie in movies_data_dict if movie.lower() == title.lower()), None)
         if movie:
             del movies_data_dict[movie]
@@ -104,8 +104,8 @@ class IStorage(ABC):
             ValueError: If the title or rating input fails validation.
         """
         movies_data_dict = self.read_movies()
-        self.validate_title(title)
-        self.validate_rating(rating)
+        self._validate_title(title)
+        self._validate_rating(rating)
         movie = next((movie for movie in movies_data_dict if movie.lower() == title.lower()), None)
         if movie:
             movies_data_dict[movie]["rating"] = rating
@@ -115,7 +115,7 @@ class IStorage(ABC):
         self.write_movies(movies_data_dict)
 
 
-    def validate_title(self, title: str):
+    def _validate_title(self, title: str):
         """
         Validates the title input.
 
@@ -129,7 +129,7 @@ class IStorage(ABC):
             raise ValueError(f"Title must be an string, got {type(title)}")
 
 
-    def validate_rating(self, rating: float):
+    def _validate_rating(self, rating: float):
         """
         Validates the rating input.
 

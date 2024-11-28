@@ -1,6 +1,5 @@
 from API_Key import KEY
 import requests
-import json
 
 
 def api_request_data(title: str):
