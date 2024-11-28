@@ -100,7 +100,11 @@ class MovieApp:
             movies (dict): A dictionary of the user's current movies, where the
                            keys are movie titles and the values contain movie details.
         """
-        title, year, rating, poster_url = self.get_movie_name_and_fetch_info_from_api(movies)
+        api_data = self.get_movie_name_and_fetch_info_from_api(movies)
+        if api_data:
+            title, year, rating, poster_url = api_data
+        else:
+            return
         self.storage.add_movie(title, year, rating, poster_url)
 
 
@@ -146,11 +150,15 @@ class MovieApp:
             if not new_movie:
                 print("Movie name must not be empty.")
                 continue
-            title, year, rating, poster_url = api_request_data(new_movie)
+            api_data = api_request_data(new_movie)
+            if api_data:
+                title, year, rating, poster_url = api_data
+            else:
+                return False
             if title in movies:
                 print(f"Movie {title} already exist!")
-            elif title:
-                return title, year, rating, poster_url
+            else:
+                return api_data
 
 
 

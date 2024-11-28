@@ -8,5 +8,10 @@
         "year": 2001,
         "rating": 5.6,
         "poster_url": "SOON"
+    },
+    "The Joker": {
+        "year": "1960",
+        "rating": "6.5/10",
+        "poster_url": "https://m.media-amazon.com/images/M/MV5BMGZkMmI5ZjMtNWRjMy00NmI2LTk3NzQtNjZhOGMyNmRjZGNjXkEyXkFqcGc@._V1_SX300.jpg"
     }
 }
