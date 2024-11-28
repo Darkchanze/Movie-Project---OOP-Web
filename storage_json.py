@@ -76,30 +76,28 @@ class StorageJson(IStorage):
             print(f"{name} ({value['year']}): {value['rating']}")
 
 
-    def add_movie(self, title: str, year: int, rating: float, poster_url: str):
+    def add_movie(self, title: str, year: str, rating: str, poster_url: str):
         """
         Adds a new movie to the json file of the instance.
 
         Args:
             title (str): Title of the movie.
-            year (int): Release year of the movie.
-            rating (float): Rating of the movie.
+            year (str): Release year of the movie.
+            rating (str): Rating of the movie.
             poster_url (str): URL to the movie's poster image.
 
         Raises:
             ValueError: If any of the inputs fail validation. This is checked with the validate functions.
         """
         movies_data_dict = self.read_movies()
-        self.validate_title(title)
-        self.validate_year(year)
-        self.validate_rating(rating)
-        self.validate_poster_url(poster_url)
         movies_data_dict[title] = {}
         movies_data_dict[title]['year'] = year
         movies_data_dict[title]['rating'] = rating
         movies_data_dict[title]['poster_url'] = poster_url
         print(f"Movie {title} successfully added")
         self.write_movies(movies_data_dict)
+
+
 
 
     def validate_title(self, title: str):

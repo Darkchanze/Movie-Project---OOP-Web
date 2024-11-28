@@ -1,5 +1,6 @@
 import statistics
 import random
+from API_Movies import api_request_data
 from storage_json import StorageJson
 from storage_csv import StorageCsv
 
@@ -93,15 +94,13 @@ class MovieApp:
 
     def add_movie(self, movies: dict):
         """
-        Adds a new movie to the instance of the user.
+        Add a new movie to the user's collection.
 
         Args:
-            movies (dict): The current dictionary of movies.
+            movies (dict): A dictionary of the user's current movies, where the
+                           keys are movie titles and the values contain movie details.
         """
-        title = self.get_new_movie_name(movies)
-        year = self.get_new_movie_year()
-        rating = self.get_new_movie_rating()
-        poster_url = "NOT ADDED YET"                                  # todo will be added soon
+        title, year, rating, poster_url = self.get_movie_name_and_fetch_info_from_api(movies)
         self.storage.add_movie(title, year, rating, poster_url)
 
 
@@ -127,39 +126,32 @@ class MovieApp:
         self.storage.update_movie(movie_to_update, rating)
 
 
-    def get_new_movie_name(self, movies: dict):
+    def get_movie_name_and_fetch_info_from_api(self, movies: dict):
         """
-        Prompt the user to enter a name for a new movie.
+        Prompt the user to enter a movie name, fetch its details from an API,
+        and ensure it is not already in the movie collection.
 
         Args:
-            movies (dict): The current dictionary of movies.
+            movies (dict): A dictionary with existing movies,
+                           where the keys are the movie titles.
 
         Returns:
-            str: The name of the new movie.
+            tuple: A tuple containing the movie details fetched from the API:
+                   (title (str), year (str), rating (str), poster_url (str)).
+                   These details are only returned if the movie is valid and
+                   not already in the collection.
         """
         while True:
-            new_movie = input("Enter new movie name: ")
-            if new_movie in movies:
-                print(f"Movie {new_movie} already exist!")
-            elif new_movie:
-                return new_movie
-            else:
+            new_movie = input("Enter new movie name: ").strip()
+            if not new_movie:
                 print("Movie name must not be empty.")
+                continue
+            title, year, rating, poster_url = api_request_data(new_movie)
+            if title in movies:
+                print(f"Movie {title} already exist!")
+            elif title:
+                return title, year, rating, poster_url
 
-
-    def get_new_movie_year(self):  #
-        """
-        Prompt the user to enter the release year of a new movie.
-
-        Returns:
-            int: The year of the new movie.
-        """
-        while True:
-            try:
-                new_movie_year = int(input("Enter new movie year: "))
-                return new_movie_year
-            except ValueError:
-                print("Please enter a valid year.")
 
 
     def get_new_movie_rating(self):

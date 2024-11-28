@@ -1,3 +1,4 @@
+
 from istorage import IStorage
 import csv
 
@@ -83,7 +84,6 @@ class StorageCsv(IStorage):
                     row = {'title': title}
                     row.update(info)
                     rows.append(row)
-                print(rows)
                 writer.writerows(rows)
             print("CSV file was successfully created.")
         except IOError as e:
@@ -100,7 +100,7 @@ class StorageCsv(IStorage):
             print(f"{name} ({value['year']}): {value['rating']}")
 
 
-    def add_movie(self, title: str, year: int, rating: float, poster_url: str):
+    def add_movie(self, title: str, year: str, rating: str, poster_url: str):
         """
         Adds a new movie to the json file of the instance.
 
@@ -114,73 +114,12 @@ class StorageCsv(IStorage):
             ValueError: If any of the inputs fail validation. This is checked with the validate functions.
         """
         movies_data_dict = self.read_movies()
-        self.validate_title(title)
-        self.validate_year(year)
-        self.validate_rating(rating)
-        self.validate_poster_url(poster_url)
         movies_data_dict[title] = {}
         movies_data_dict[title]['year'] = year
         movies_data_dict[title]['rating'] = rating
         movies_data_dict[title]['poster_url'] = poster_url
         print(f"Movie {title} successfully added")
         self.write_movies(movies_data_dict)
-
-
-    def validate_title(self, title: str):
-        """
-        Validates the title input.
-
-        Args:
-            title (str): Title of the movie.
-
-        Raises:
-            ValueError: If the title is not a string.
-        """
-        if not isinstance(title, str):
-            raise ValueError(f"Title must be an string, got {type(title)}")
-
-
-    def validate_year(self, year: int):
-        """
-        Validates the year input.
-
-        Args:
-            year (int): Release year of the movie.
-
-        Raises:
-            ValueError: If the year is not an integer.
-        """
-        if not isinstance(year, int):
-            raise ValueError(f"Year must be an integer, got {type(year)}")
-
-
-    def validate_rating(self, rating: float):
-        """
-        Validates the rating input.
-
-        Args:
-            rating (float): Rating of the movie.
-
-        Raises:
-            ValueError: If the rating is not a float.
-        """
-        if not isinstance(rating, float):
-            raise ValueError(f"Rating must be an float, got {type(rating)}")
-
-
-
-    def validate_poster_url(self, poster_url: str):
-        """
-        Validates the poster URL input.
-
-        Args:
-            poster_url (str): URL to the movie's poster image.
-
-        Raises:
-            ValueError: If the poster URL is not a string.
-        """
-        if not isinstance(poster_url, str):
-            raise ValueError(f"Poster_url must be an string, got {type(poster_url)}")
 
 
     def delete_movie(self, title: str):
@@ -233,6 +172,32 @@ class StorageCsv(IStorage):
         self.write_movies(movies_data_dict)
 
 
+    def validate_title(self, title: str):
+        """
+        Validates the title input.
+
+        Args:
+            title (str): Title of the movie.
+
+        Raises:
+            ValueError: If the title is not a string.
+        """
+        if not isinstance(title, str):
+            raise ValueError(f"Title must be an string, got {type(title)}")
+
+
+    def validate_rating(self, rating: float):
+        """
+        Validates the rating input.
+
+        Args:
+            rating (float): Rating of the movie.
+
+        Raises:
+            ValueError: If the rating is not a float.
+        """
+        if not isinstance(rating, float):
+            raise ValueError(f"Rating must be an float, got {type(rating)}")
 
 
 
