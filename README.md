@@ -39,7 +39,7 @@ List the ready features here:
 
 
 ## Screenshots
-![Example screenshot](./static/web_preview.png)
+![Example screenshot](./static/movie.png)
 <!-- If you have screenshots you'd like to share, include them here. -->
 
 

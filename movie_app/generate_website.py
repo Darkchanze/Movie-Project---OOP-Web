@@ -1,3 +1,5 @@
+import os
+
 def generate_website(movies_data: dict):
     """
     Generate an HTML file for the movie website based on movie_data.
@@ -59,7 +61,8 @@ def open_base_html():
         str: The content of the base HTML template as a string.
     """
     try:
-        with open("index_template.html", "r") as handle:
+        path = os.path.join('static', 'index_template.html')
+        with open(path, "r") as handle:
             base_html = handle.read()
             return base_html
     except FileNotFoundError:
@@ -79,7 +82,8 @@ def save_final_html_in_document(final_html: str):
         final_html (str): The HTML content to be saved.
     """
     try:
-        with open("index.html", "w") as handle:
+        path = os.path.join('static', 'index.html')
+        with open(path, "w") as handle:
             handle.write(final_html)
     except PermissionError:
         print("You do not have permission to write to this file.")

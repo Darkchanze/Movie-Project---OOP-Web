@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-
+import os
 class IStorage(ABC):
     """Abstract parent class defining the interface of movie storage child classes."""
 
@@ -18,7 +18,10 @@ class IStorage(ABC):
             raise ValueError("Given file_path must not be empty!")
         if not isinstance(file_path, str):
             raise TypeError(f"Given file_path must be a string! Input was {type(file_path)}.")
-        self.file_path = file_path.strip()
+        folder_path = "data"
+        os.makedirs(folder_path, exist_ok=True)
+
+        self.file_path = os.path.join(folder_path, file_path.strip())
 
 
     @abstractmethod

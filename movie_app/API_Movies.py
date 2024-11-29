@@ -1,4 +1,4 @@
-from API_Key import KEY
+from movie_app.API_Key import KEY
 import requests
 
 

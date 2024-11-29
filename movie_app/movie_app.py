@@ -1,7 +1,7 @@
 import statistics
 import random
-from API_Movies import api_request_data
-from generate_website import generate_website
+from movie_app.API_Movies import api_request_data
+from movie_app.generate_website import generate_website
 
 
 class MovieApp:

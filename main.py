@@ -1,5 +1,5 @@
-from movie_app import MovieApp
-from storage_csv import StorageCsv
+from storage.storage_csv import StorageCsv
+from movie_app.movie_app import MovieApp
 
 def main():
     """Main program sequence of movie project."""
