@@ -35,13 +35,14 @@ def create_html_code_for_website(movies_data: dict):
         movie_name = movie
         movie_year = movies_data[movie]["year"]
         movie_poster = movies_data[movie]["poster_url"]
-        #movie_rating = movies_data[movie]["rating"]             #Get rating if later added
+        movie_rating = movies_data[movie]["rating"]             #Get rating if later added
         html_code += (f'''
         <li>
             <div class="movie">
                 <img class="movie-poster" src="{movie_poster}" alt="Poster {movie_name}">
                 <div class="movie-title">{movie_name}</div>
                 <div class="movie-year">{movie_year}</div>
+                <div class="movie-year">{movie_rating}</div>
             </div>
         </li>
         ''')
