@@ -109,9 +109,10 @@ class IStorage(ABC):
         movies_data_dict = self.read_movies()
         self._validate_title(title)
         self._validate_rating(rating)
+        new_movie_rating_formated = str(rating) + "/10"
         movie = next((movie for movie in movies_data_dict if movie.lower() == title.lower()), None)
         if movie:
-            movies_data_dict[movie]["rating"] = rating
+            movies_data_dict[movie]["rating"] = new_movie_rating_formated
             print(f"Movie {movie} successfully updated")
         else:
             print(f"Movie {movie} doesn't exist!")

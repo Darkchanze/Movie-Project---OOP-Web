@@ -198,9 +198,10 @@ class MovieApp:
             - Best movie
             - Worst movie
         """
-        list_of_ratings = [movie['rating'] for movie in movies.values()]
-        print(f"Average rating: {round(statistics.mean(list_of_ratings), 1)}")
-        print(f"Median rating: {round(statistics.median(list_of_ratings), 1)}")
+        list_of_ratings_string = [movie['rating'] for movie in movies.values()]
+        list_of_ratings_string_float = [float(rating.split("/")[0]) for rating in list_of_ratings_string]
+        print(f"Average rating: {round(statistics.mean(list_of_ratings_string_float), 1)}")
+        print(f"Median rating: {round(statistics.median(list_of_ratings_string_float), 1)}")
         self._print_best_movie(movies)
         self._print_worst_movie(movies)
 
@@ -405,7 +406,6 @@ class MovieApp:
 
 
 
-# todo Public, not public? _ or not!
 
 
 
